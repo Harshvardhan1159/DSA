@@ -1,6 +1,6 @@
 class Solution {
 public:
-void func(vector<int>&nums,vector<vector<int>>&ans,vector<int>& temp,int idx,int n, map<int,int>&mp){
+void func(vector<int>&nums,vector<vector<int>>&ans,vector<int>& temp,int idx,int n, unordered_map<int,int>&mp){
     if(idx==n){
         ans.push_back(temp);
         return;
@@ -21,7 +21,7 @@ void func(vector<int>&nums,vector<vector<int>>&ans,vector<int>& temp,int idx,int
         sort(nums.begin(),nums.end());
         vector<int>temp;
         vector<vector<int>>ans;
-       map<int,int>mp;
+       unordered_map<int,int>mp;
         int n = nums.size();
         for(int i =0;i<n;i++){
             mp[nums[i]]++;
