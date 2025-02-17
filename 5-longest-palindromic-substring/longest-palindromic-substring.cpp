@@ -1,38 +1,37 @@
 class Solution {
 public:
-    string longestPalindrome(string s) {
+  
+ string longestPalindrome(string s) {
         int n = s.size();
         if (n == 0) return ""; 
-        
         int len = 1;
-        int idx = 0;  // Fix: Start from a valid index
-        vector<vector<bool>> dp(n, vector<bool>(n, false));
-
-        // Base case: Single-character substrings are palindromes
-        for (int i = 0; i < n; i++) {
-            dp[i][i] = true;
+        int idx = 0;
+        vector<vector<bool>>dp(n,vector<bool>(n,false));
+        for(int i=0;i<n;i++){
+            dp[i][i]=true;
         }
+      for(int l =2;l<=n;l++){
+        for(int i=0;i<n-l+1;i++){
+            int j = i+l-1;
 
-        // Fill DP table
-        for (int l = 2; l <= n; l++) {  // Length of substring
-            for (int i = 0; i < n - l + 1; i++) {  
-                int j = i + l - 1;  // Fix: Correct index calculation
-
-                if (s[i] == s[j]) {
-                    if (l == 2) {
-                        dp[i][j] = true;
-                    } else {
-                        dp[i][j] = dp[i + 1][j - 1];
-                    }
-
-                    if (dp[i][j] && j - i + 1 > len) {  // Fix: Condition check
-                        len = j - i + 1;
-                        idx = i;
-                    }
+            if(s[i]==s[j] && l==2){
+                dp[i][j]=true;
+                if(j-i+1>len){
+                    len = j-i+1;
+                    idx = i;
                 }
+            }else if(s[i]==s[j] && dp[i+1][j-1]==true){
+                dp[i][j]= true;
+                 if(j-i+1>len){
+                    len = j-i+1;
+                    idx = i;
+                }
+            }else{
+                dp[i][j]=false;
             }
         }
-
-        return s.substr(idx, len);  // Extract substring
+      }
+      return s.substr(idx,len);
+        
     }
 };
