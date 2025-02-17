@@ -26,7 +26,7 @@ public:
         }
 
         double ans = 0;
-        while ((e - s) > 1e-6) { 
+        while ((e - s) > 1e-5) { 
             double mid = s + (e - s) / 2.0;
             double temp = func(squares, mid);
             if (temp <= 0.0) {
