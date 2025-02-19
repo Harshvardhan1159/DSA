@@ -17,6 +17,9 @@ class Solution {
     }
     if (heightL == heightR)  
       return pow(2, heightL) - 1;
-    return 1 + countNodes(root->left) + countNodes(root->right);
+    return 1 + countNodes(root->left) + countNodes(root->right);    //humesha complete tree do parts me divide hota h full and incomplete 
+    // agar full wala part h to 2^x-1 nodes hogi
+    //varna 1+ leftnode and right nodes 
+    //log n soln
   }
 };
