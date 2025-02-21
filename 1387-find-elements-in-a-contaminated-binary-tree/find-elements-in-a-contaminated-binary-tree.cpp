@@ -12,7 +12,7 @@
 class FindElements {
 public:
     TreeNode* root;
-    std::unordered_set<int> values; // Store values for O(1) find
+    unordered_set<int> values; 
 
     FindElements(TreeNode* root) {
         this->root = root;
