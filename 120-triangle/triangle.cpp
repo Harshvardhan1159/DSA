@@ -9,9 +9,22 @@ public:
         return dp[r][c]=min(x, y);
     }
 
-    int minimumTotal(vector<vector<int>>& triangle) {
-        int n = triangle.size();
+    int minimumTotal(vector<vector<int>>& arr) {
+        int n = arr.size();
         vector<vector<int>>dp(n,vector<int>(n,-1));
-        return func(0, 0, n, triangle,dp);
+        for(int i=0;i<n;i++){
+            dp[n-1][i]=arr[n-1][i];
+        }
+        for(int r=n-2;r>=0;r--){
+            for(int c =0;c<=r;c++){
+                  int x = arr[r][c] + dp[r+1][c];
+                  int y = arr[r][c] + dp[r+1][c+1];
+        
+                   dp[r][c]=min(x, y);
+            }
+        }
+        return dp[0][0];
+
+        // return func(0, 0, n, triangle,dp);
     }
 };
