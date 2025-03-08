@@ -16,7 +16,7 @@ public:
             dp[n-1][i]=arr[n-1][i];
         }
         for(int r=n-2;r>=0;r--){
-            for(int c =0;c<=r;c++){
+            for(int c =r;c>=0;c--){
                   int x = arr[r][c] + dp[r+1][c];
                   int y = arr[r][c] + dp[r+1][c+1];
         
