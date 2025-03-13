@@ -1,24 +1,18 @@
 class Solution {
 public:
-int lcs(int i,int j,string &s , string &b,vector<vector<int>>&dp){
-    if(i<0||j<0)return 0;
-    if(dp[i][j]!=-1)return dp[i][j];
-    if(s[i]==b[j])return dp[i][j]= 1+lcs(i-1,j-1,s,b,dp);
-    return dp[i][j]=max(lcs(i,j-1,s,b,dp),lcs(i-1,j,s,b,dp));
-}
-    int longestCommonSubsequence(string s, string b) {
-        int n = s.size();
-        int m = b.size();
-        vector<vector<int>>dp(n+1,vector<int>(m+1,0));
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                if(s[i-1]==b[j-1]){
-                    dp[i][j]=1+dp[i-1][j-1];
-                }else{
-                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
-                }
-            }
+   int func(int n,int m , string &s,string &t,vector<vector<int>>&dp){
+    if(n<0 || m<0)return 0;
+    if(dp[n][m]!=-1)return dp[n][m];
+    if(s[n]==t[m]){
+        return dp[n][m]=1+func(n-1,m-1,s,t,dp);
+    } else {
+            return dp[n][m]= max(func(n - 1, m, s, t,dp), func(n, m - 1, s, t,dp)); // Take max of both choices
         }
-        return dp[n][m];
+   }
+    int longestCommonSubsequence(string text1, string text2) {
+        int n = text1.size();
+        int m = text2.size();
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        return func(n-1,m-1,text1,text2,dp);
     }
 };
