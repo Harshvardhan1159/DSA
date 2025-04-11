@@ -16,7 +16,7 @@ public:
             for (int i = 0; i < level_size; ++i) {
                 auto node_index_pair = q.front();
                 TreeNode* node = node_index_pair.first;
-                int node_index = node_index_pair.second - start_index;
+                int node_index = node_index_pair.second;
                 q.pop();
                 
                 if (node->left != nullptr) {
