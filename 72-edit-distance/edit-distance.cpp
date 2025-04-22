@@ -1,51 +1,49 @@
 class Solution {
 public:
-    int func(string &s, string &t, int i, int j,  vector<vector<int>>&dp) {
-        if (i == s.size() && j == t.size()) return 0;
-        if (i == s.size()) return t.size() - j; // Insert remaining characters of t
-        if (j == t.size()) return s.size() - i; // Delete remaining characters of s
-        if(dp[i][j]!=-1)return dp[i][j];
-        if (s[i] == t[j]) {
-            return func(s, t, i + 1, j + 1,dp); // No operation needed
-        } else {
-            int insertOp = 1 + func(s, t, i, j + 1,dp);  // Insert t[j] into s
-            int deleteOp = 1 + func(s, t, i + 1, j,dp);  // Delete s[i]
-            int replaceOp = 1 + func(s, t, i + 1, j + 1,dp); // Replace s[i] with t[j]
+int func(int n,int m , string s,string t){
+    if(n==0 && m==0)return 0;
+    if(n==0)return m+1;
+    if(m==0)return n+1;
 
-            return min(insertOp, min(deleteOp, replaceOp));
-        }
+
+    if(s[n-1]==t[m-1]){
+        return func(n-1,m-1,s,t);
+    }else{
+        int insert = 1+func(n,m-1,s,t);
+        int del = 1+func(n-1,m,s,t);
+        int replace = 1+func(n-1,m-1,s,t);
+        return min(insert,min(del,replace));
     }
-
-    int minDistance(string s, string t) {
-         int n = s.size();
-        int m = t.size();
-        
-        // DP table initialization
-        vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
-
-        // Base cases
-        for (int i = 0; i <= n; i++) {
-            dp[i][m] = n - i; // Deleting remaining characters of s
-        }
-        for (int j = 0; j <= m; j++) {
-            dp[n][j] = m - j; // Inserting remaining characters of t
-        }
-
-        // Bottom-up DP computation
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = m - 1; j >= 0; j--) {
-                if (s[i] == t[j]) {
-                    dp[i][j] = dp[i + 1][j + 1]; // No operation needed
-                } else {
-                    dp[i][j] = 1 + min({
-                        dp[i][j + 1],   // Insert t[j] into s
-                        dp[i + 1][j],   // Delete s[i]
-                        dp[i + 1][j + 1] // Replace s[i] with t[j]
-                    });
+}
+    int minDistance(string word1, string word2) {
+        int n = word1.size();
+        int m = word2.size();
+        vector<vector<int>>dp(n+1,vector<int>(m+1));
+      
+        for(int i=0;i<=n;i++){
+            for(int j=0;j<=m;j++){
+                if(i==0 ){
+                    dp[0][j]=j;
+                }
+                if(j==0){
+                    dp[i][0]=i;
                 }
             }
         }
+          dp[0][0]=0;
+          for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(word1[i-1]==word2[j-1]){
+                    dp[i][j]=dp[i-1][j-1];
+                }else{
+                     int insert = 1+dp[i][j-1];
+        int del = 1+dp[i-1][j];
+        int replace = 1+dp[i-1][j-1];
+        dp[i][j]=min(insert,min(del,replace));
+                }
+            }
+          }
 
-        return dp[0][0]; // The minimum edit distance from s[0..n] to t[0..m]
+        return dp[n][m];
     }
 };
