@@ -1,9 +1,8 @@
-class Solution {
-public:
-   
-    static bool comp(const string &a, const string &b) {
+ bool comp(const string &a, const string &b) {
         return a.size() < b.size();
     }
+class Solution {
+public:
 
    
     bool check(const string &longer, const string &shorter) {
