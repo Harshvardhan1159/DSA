@@ -1,21 +1,27 @@
 class Solution {
 public:
-   void func(vector<int>& nums,vector<vector<int>>&ans,vector<int>&temp,int idx, int n){
-    if(idx==n){
-        ans.push_back(nums);
+void f(int idx,vector<int>& nums,vector<int>& dem, vector<vector<int>>&ans,vector<int>&x){
+    if(dem.size()==nums.size()){
+        ans.push_back(dem);
         return;
     }
+    for(int i=0;i<nums.size();i++){
+        if(x[i]==0){
+        dem.push_back(nums[i]);
+        x[i]=1;
+        f(0,nums,dem,ans,x);
+        x[i]=0;
+        dem.pop_back();
+        }
 
-    for(int i=idx;i<n;i++){
-        swap(nums[idx],nums[i]);
-        func(nums,ans,temp,idx+1,n);
-        swap(nums[idx],nums[i]);
     }
-   }
+}
     vector<vector<int>> permute(vector<int>& nums) {
-         vector<vector<int>>ans;
-         vector<int>temp;
-         func(nums,ans,temp,0,nums.size());
-         return ans;
+       int n = nums.size();
+       vector<int>dem; 
+       vector<vector<int>>ans;
+       vector<int>x(n,0);
+        f(0,nums,dem,ans,x);
+       return ans;
     }
 };
