@@ -1,41 +1,36 @@
 class Solution {
 public:
-    bool func(int i,int j , vector<vector<char>>& board, string word, vector<vector<int>>&vis,int n , int m,string& h,int idx){
-        if(idx==word.size())return true;
-      if(i>=n || j>=m || i<0 || j<0 || vis[i][j]==1 || word[idx]!=board[i][j])return false;
-      
-     
-      vis[i][j]=1;
-       
-     
-       
-       bool  ans= func(i+1,j,board,word,vis,n,m,h,idx+1)||
-        func(i-1,j,board,word,vis,n,m,h,idx+1)||
-        func(i,j-1,board,word,vis,n,m,h,idx+1)||
-        func(i,j+1,board,word,vis,n,m,h,idx+1);
-    
-      vis[i][j]=0;
-      return ans;
+    bool f(vector<vector<char>>& board, string& word, int n, int m, int i, int j, int k) {
+        if (k == word.size()) return true;
 
+        if (i < 0 || j < 0 || i >= n || j >= m || board[i][j] != word[k])
+            return false;
+
+        char temp = board[i][j];
+        board[i][j] = '#'; // mark as visited
+
+        bool found = f(board, word, n, m, i - 1, j, k + 1) ||
+                     f(board, word, n, m, i + 1, j, k + 1) ||
+                     f(board, word, n, m, i, j - 1, k + 1) ||
+                     f(board, word, n, m, i, j + 1, k + 1);
+
+        board[i][j] = temp; // backtrack
+        return found;
     }
+
     bool exist(vector<vector<char>>& board, string word) {
         int n = board.size();
         int m = board[0].size();
-        vector<vector<int>>vis(n,vector<int>(m,0));
-        bool ans = false;
-        string h;
-        for(int i=0;i<n;i++){
-            for(int j =0;j<m;j++){
-                if(board[i][j]==word[0]){
-                    if (func(i,j,board,word,vis,n,m,h,0)){
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == word[0]) {
+                    if (f(board, word, n, m, i, j, 0)) {
                         return true;
                     }
                 }
             }
-           
-         }
-         return ans;
-
-
+        }
+        return false;
     }
 };
