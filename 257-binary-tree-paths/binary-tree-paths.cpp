@@ -1,39 +1,35 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
-void func(TreeNode* root,vector<string>&ans,string temp){
-     temp += to_string(root->val);
-   if(root->left==NULL && root->right==NULL){
-    ans.push_back(temp);
-    return;
-   }
-   
-   if(root->left!=NULL){
-    func(root->left,ans,temp+"->");
-   }
-   
-   if(root->right!=NULL){
-    func(root->right,ans,temp+"->");
-   }
+    void solve(TreeNode* root, string& path, vector<string>& result) {
+        if (!root) return;
 
-   temp.pop_back();
+        string val = to_string(root->val);
+        int len = val.length(); // length of current node's value
 
+        if (!path.empty()) {
+            path += "->";
+            len += 2; // count "->" as well
+        }
 
-}
+        path += val;
+
+        // If it's a leaf node, add the path
+        if (!root->left && !root->right) {
+            result.push_back(path);
+        } 
+            // Recurse
+            solve(root->left, path, result);
+            solve(root->right, path, result);
+    
+
+        // Backtrack using pop_back
+        while (len--) path.pop_back();
+    }
+
     vector<string> binaryTreePaths(TreeNode* root) {
-        vector<string>ans;
-        string temp="";
-        func(root,ans,temp);
-        return ans;
+        vector<string> result;
+        string path;
+        solve(root, path, result);
+        return result;
     }
 };
