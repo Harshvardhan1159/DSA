@@ -1,55 +1,56 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        map<TreeNode*,TreeNode*>mp;
-        queue<TreeNode*>q;
-        q.push(root);
-        while(!q.empty()){
-        TreeNode* dem = q.front();
-        q.pop();
-        if(dem->left){
-            mp[dem->left]=dem;
-            q.push(dem->left);
+    // Step 1: Map each node to its parent using DFS
+    void markParents(TreeNode* root, map<TreeNode*, TreeNode*>& parent) {
+        if (!root) return;
+        if (root->left) {
+            parent[root->left] = root;
+            markParents(root->left, parent);
         }
-        if(dem->right){
-          mp[dem->right]=dem;
-          q.push(dem->right);
+        if (root->right) {
+            parent[root->right] = root;
+            markParents(root->right, parent);
         }
-        }
-        vector<int>ans;
-        queue<pair<TreeNode*,int>>qe;
-        qe.push({target,0});
-        map<TreeNode*,int>vis;
-        vis[target]=1;
-        while(!qe.empty()){
-            pair<TreeNode*,int>t=qe.front();
-            TreeNode* node = t.first;
-            int dis = t.second;
-            vis[node]=1;
-            if(dis==k){
-                ans.push_back(node->val);
-            }
-            qe.pop();
-            if(mp[node] && vis[mp[node]]!=1){
-                qe.push({mp[node],dis+1});
-            }
-            if(node->left && vis[node->left]!=1){
-                qe.push({node->left,dis+1});
-            }
-            if(node->right && vis[node->right]!=1){
-                qe.push({node->right,dis+1});
-            }
-        }
-    return ans;
+    }
 
+    // Step 2: BFS to find all nodes at distance K
+    vector<int> bfs(TreeNode* target, map<TreeNode*, TreeNode*>& parent, int k) {
+        map<TreeNode*, bool> visited;
+        queue<pair<TreeNode*, int>> q;
+        vector<int> result;
+
+        q.push({target, 0});
+        visited[target] = true;
+
+        while (!q.empty()) {
+            auto [node, dist] = q.front();
+            q.pop();
+
+            if (dist == k) {
+                result.push_back(node->val);
+            }
+
+            if (node->left && !visited[node->left]) {
+                visited[node->left] = true;
+                q.push({node->left, dist + 1});
+            }
+            if (node->right && !visited[node->right]) {
+                visited[node->right] = true;
+                q.push({node->right, dist + 1});
+            }
+            if (parent[node] && !visited[parent[node]]) {
+                visited[parent[node]] = true;
+                q.push({parent[node], dist + 1});
+            }
+        }
+
+        return result;
+    }
+
+    // Main function
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        map<TreeNode*, TreeNode*> parent;
+        markParents(root, parent);
+        return bfs(target, parent, k);
     }
 };
