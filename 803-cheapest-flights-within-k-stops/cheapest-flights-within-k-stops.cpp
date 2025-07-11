@@ -1,19 +1,17 @@
 class Solution {
 public:
-    int findCheapestPrice(int n, vector<vector<int>>& f, int src, int dst, int k) {
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
         vector<vector<pair<int, int>>> adj(n);
-        for (auto& i : f) {
-            int u = i[0], v = i[1], w = i[2];
-            adj[u].push_back({v, w});
+        for (auto& f : flights) {
+            adj[f[0]].push_back({f[1], f[2]});
         }
 
-        int ans = INT_MAX;
-        queue<pair<int, pair<int, int>>> q; // {node, {stops, cost}}
-        q.push({src, {-1, 0}});
+        vector<int> price(n, INT_MAX);
+        price[src] = 0;
 
-        // visited[node][stops] = minimum cost to reach node using stops
-        vector<vector<int>> visited(n, vector<int>(k + 2, INT_MAX));
-        visited[src][0] = 0;
+        // Queue format: {node, {stops, cost}}
+        queue<pair<int, pair<int, int>>> q;
+        q.push({src, {0, 0}});
 
         while (!q.empty()) {
             int node = q.front().first;
@@ -21,24 +19,19 @@ public:
             int cost = q.front().second.second;
             q.pop();
 
-            if (node == dst && stops <= k) {
-                ans = min(ans, cost);
-                continue;
-            }
+            if (stops > k) continue;
 
-            if (stops == k) continue;
+            for (auto& [next, wt] : adj[node]) {
+                int newCost = cost + wt;
 
-            for (auto i : adj[node]) {
-                int adjnode = i.first;
-                int wt = i.second;
-
-                if (cost + wt < visited[adjnode][stops + 1]) {
-                    visited[adjnode][stops + 1] = cost + wt;
-                    q.push({adjnode, {stops + 1, cost + wt}});
+                // Only push if we found a cheaper path
+                if (newCost < price[next]) {
+                    price[next] = newCost;
+                    q.push({next, {stops + 1, newCost}});
                 }
             }
         }
 
-        return ans == INT_MAX ? -1 : ans;
+        return price[dst] == INT_MAX ? -1 : price[dst];
     }
 };
