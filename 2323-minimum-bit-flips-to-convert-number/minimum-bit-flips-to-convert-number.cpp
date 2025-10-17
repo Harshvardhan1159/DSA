@@ -6,8 +6,8 @@ public:
         
      // loop to count the no. of set bits
         while(n>0){
-           n = n & (n-1);
-           res++;
+          if(n&1==1)res++;
+          n=n>>1;
         }
         return res;
     }
