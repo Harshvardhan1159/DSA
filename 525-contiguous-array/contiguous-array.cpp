@@ -25,7 +25,8 @@ public:
             if(map.find(sum) != map.end()) {
                 int len = i - map[sum];
                 ans = max(len, ans);
-            } else {
+            } 
+            if(map.find(sum)==map.end()){
                 map[sum] = i;
             }
         }
